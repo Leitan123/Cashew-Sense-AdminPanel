@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\LeafController;
+use App\Http\Controllers\PestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/leafs', [LeafController::class, 'index'])->name('leafs.index');
+    Route::get('/pests', [PestController::class, 'index'])->name('pests.index');
 });
 
 require __DIR__.'/auth.php';

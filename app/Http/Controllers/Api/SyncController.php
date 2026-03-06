@@ -22,15 +22,25 @@ class SyncController extends Controller
             // 1. Process Users (Customers)
             if (isset($data['users']) && is_array($data['users'])) {
                 foreach ($data['users'] as $userData) {
-                    Customer::updateOrCreate(
-                        ['phone' => $userData['phone']], // unique identifier
-                        [
+                    $existing = DB::table('customers')->where('phone', $userData['phone'])->first();
+                    
+                    if ($existing) {
+                        DB::table('customers')->where('phone', $userData['phone'])->update([
                             'name' => $userData['name'],
                             'pin_hash' => $userData['pin_hash'],
                             'district' => $userData['district'],
                             'farm_size' => $userData['farm_size'],
-                        ]
-                    );
+                        ]);
+                    } else {
+                        DB::table('customers')->insert([
+                            'name' => $userData['name'],
+                            'phone' => $userData['phone'],
+                            'pin_hash' => $userData['pin_hash'],
+                            'district' => $userData['district'],
+                            'farm_size' => $userData['farm_size'],
+                            'created_at' => now(), // The user's schema has created_at but no updated_at
+                        ]);
+                    }
                 }
             }
 
@@ -40,14 +50,35 @@ class SyncController extends Controller
                     // Must find the customer by phone to get the cloud ID
                     $customer = Customer::where('phone', $scan['user_phone'])->first();
                     if ($customer) {
-                        // Check if this specific scan already exists to prevent duplicates
-                        LeafScan::firstOrCreate([
-                            'customer_id' => $customer->id,
-                            'scan_timestamp' => $scan['timestamp'],
-                            'disease_name' => $scan['diseaseName'],
-                        ], [
-                            'image_url' => $scan['imagePath'] ?? 'placeholder', // In a real app we'd upload the file
-                        ]);
+                        $exists = DB::table('leaf_scans')
+                            ->where('customer_id', $customer->id)
+                            ->where('scan_timestamp', $scan['timestamp'])
+                            ->where('disease_name', $scan['diseaseName'])
+                            ->exists();
+                            
+                        $imageUrl = $scan['imagePath'] ?? 'placeholder';
+                        if (!empty($scan['imageBase64'])) {
+                            $imageData = base64_decode($scan['imageBase64']);
+                            $fileName = 'leaf_' . time() . '_' . uniqid() . '.jpg';
+                            
+                            $dir = public_path('desease'); // matching user's exact folder name requirement
+                            if (!file_exists($dir)) {
+                                mkdir($dir, 0777, true);
+                            }
+                            
+                            file_put_contents($dir . '/' . $fileName, $imageData);
+                            $imageUrl = 'public/desease/' . $fileName;
+                        }
+
+                        if (!$exists) {
+                            DB::table('leaf_scans')->insert([
+                                'customer_id' => $customer->id,
+                                'scan_timestamp' => $scan['timestamp'],
+                                'disease_name' => $scan['diseaseName'],
+                                'image_url' => $imageUrl,
+                                'created_at' => now(), // The live schema only has created_at
+                            ]);
+                        }
                     }
                 }
             }
@@ -57,13 +88,35 @@ class SyncController extends Controller
                 foreach ($data['pest_scans'] as $scan) {
                     $customer = Customer::where('phone', $scan['user_phone'])->first();
                     if ($customer) {
-                        PestScan::firstOrCreate([
-                            'customer_id' => $customer->id,
-                            'scan_timestamp' => $scan['timestamp'],
-                            'pest_name' => $scan['pestName'],
-                        ], [
-                            'image_url' => $scan['imagePath'] ?? 'placeholder',
-                        ]);
+                        $exists = DB::table('pest_scans')
+                            ->where('customer_id', $customer->id)
+                            ->where('scan_timestamp', $scan['timestamp'])
+                            ->where('pest_name', $scan['pestName'])
+                            ->exists();
+                            
+                        $imageUrl = $scan['imagePath'] ?? 'placeholder';
+                        if (!empty($scan['imageBase64'])) {
+                            $imageData = base64_decode($scan['imageBase64']);
+                            $fileName = 'pest_' . time() . '_' . uniqid() . '.jpg';
+                            
+                            $dir = public_path('pest');
+                            if (!file_exists($dir)) {
+                                mkdir($dir, 0777, true);
+                            }
+                            
+                            file_put_contents($dir . '/' . $fileName, $imageData);
+                            $imageUrl = 'public/pest/' . $fileName;
+                        }
+
+                        if (!$exists) {
+                            DB::table('pest_scans')->insert([
+                                'customer_id' => $customer->id,
+                                'scan_timestamp' => $scan['timestamp'],
+                                'pest_name' => $scan['pestName'],
+                                'image_url' => $imageUrl,
+                                'created_at' => now(), // The live schema only has created_at
+                            ]);
+                        }
                     }
                 }
             }
