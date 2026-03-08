@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/sync', [SyncController::class, 'sync']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/verify-employee-code', [AuthController::class, 'verifyEmployeeCode']);

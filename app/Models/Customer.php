@@ -17,6 +17,7 @@ class Customer extends Model
         'pin_hash',
         'district',
         'farm_size',
+        'employee_code',
     ];
 
     public function leafScans()

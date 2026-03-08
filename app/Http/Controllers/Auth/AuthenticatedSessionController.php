@@ -28,6 +28,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if ($request->input('role') === 'farm_owner') {
+            return redirect()->intended(route('farm_owner.dashboard'));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -36,7 +40,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        if (Auth::guard('farm_owner')->check()) {
+            Auth::guard('farm_owner')->logout();
+        } elseif (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
 
         $request->session()->invalidate();
 

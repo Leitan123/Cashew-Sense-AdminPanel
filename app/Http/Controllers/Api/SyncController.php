@@ -9,6 +9,7 @@ use App\Models\LeafScan;
 use App\Models\PestScan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class SyncController extends Controller
 {
@@ -21,25 +22,30 @@ class SyncController extends Controller
 
             // 1. Process Users (Customers)
             if (isset($data['users']) && is_array($data['users'])) {
+                // Check once if the employee_code column exists (in case migration hasn't run on live yet)
+                $hasEmployeeCode = Schema::hasColumn('customers', 'employee_code');
+
                 foreach ($data['users'] as $userData) {
                     $existing = DB::table('customers')->where('phone', $userData['phone'])->first();
                     
+                    $updateData = [
+                        'name' => $userData['name'],
+                        'pin_hash' => $userData['pin_hash'],
+                        'district' => $userData['district'],
+                        'farm_size' => $userData['farm_size'],
+                    ];
+                    if ($hasEmployeeCode) {
+                        $updateData['employee_code'] = $userData['employee_code'] ?? null;
+                    }
+
                     if ($existing) {
-                        DB::table('customers')->where('phone', $userData['phone'])->update([
-                            'name' => $userData['name'],
-                            'pin_hash' => $userData['pin_hash'],
-                            'district' => $userData['district'],
-                            'farm_size' => $userData['farm_size'],
-                        ]);
+                        DB::table('customers')->where('phone', $userData['phone'])->update($updateData);
                     } else {
-                        DB::table('customers')->insert([
-                            'name' => $userData['name'],
+                        $insertData = array_merge($updateData, [
                             'phone' => $userData['phone'],
-                            'pin_hash' => $userData['pin_hash'],
-                            'district' => $userData['district'],
-                            'farm_size' => $userData['farm_size'],
-                            'created_at' => now(), // The user's schema has created_at but no updated_at
+                            'created_at' => now(),
                         ]);
+                        DB::table('customers')->insert($insertData);
                     }
                 }
             }

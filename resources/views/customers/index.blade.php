@@ -20,6 +20,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Phone</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">District</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Farm Size (Acres)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Emp. Code</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Leaf Scans</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Pest Scans</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#4f7942] uppercase tracking-wider">Joined Date</th>
@@ -34,6 +35,15 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer->district }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer->farm_size }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($customer->employee_code)
+                                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-blue-100 text-blue-800">
+                                                {{ $customer->employee_code }}
+                                            </span>
+                                        @else
+                                            <span class="text-gray-400 italic">None</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                             {{ $customer->leaf_scans_count }}
                                         </span>
@@ -47,7 +57,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                                    <td colspan="9" class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
                                         No registered customers yet.
                                     </td>
                                 </tr>

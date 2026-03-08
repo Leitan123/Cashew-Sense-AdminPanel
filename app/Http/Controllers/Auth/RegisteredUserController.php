@@ -31,20 +31,44 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:admin,farm_owner'],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->role === 'farm_owner') {
+            $request->validate([
+                'email' => ['unique:'.\App\Models\FarmOwner::class],
+            ]);
 
-        event(new Registered($user));
+            $farmOwner = \App\Models\FarmOwner::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'unique_code' => 'FO-' . strtoupper(\Illuminate\Support\Str::random(6)),
+            ]);
 
-        Auth::login($user);
+            event(new Registered($farmOwner));
 
-        return redirect(route('dashboard', absolute: false));
+            Auth::guard('farm_owner')->login($farmOwner);
+
+            return redirect()->route('farm_owner.dashboard');
+        } else {
+            $request->validate([
+                'email' => ['unique:'.User::class],
+            ]);
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect(route('dashboard', absolute: false));
+        }
     }
 }

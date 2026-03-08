@@ -12,23 +12,8 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
                         {{ __('Dashboard') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.index')">
-                        {{ __('Customers') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('leafs.index')" :active="request()->routeIs('leafs.index')">
-                        {{ __('Leaf Scans') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('pests.index')" :active="request()->routeIs('pests.index')">
-                        {{ __('Pest Scans') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('soils.index')" :active="request()->routeIs('soils.index')">
-                        {{ __('Soil Scans') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('farm-owners.index')" :active="request()->routeIs('farm-owners.index')">
-                        {{ __('Farm Owners') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -38,7 +23,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#4f7942] hover:text-[#f5f5dc] focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -49,7 +34,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('farm_owner.profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -82,30 +67,15 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
                 {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.index')">
-                {{ __('Customers') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('leafs.index')" :active="request()->routeIs('leafs.index')">
-                {{ __('Leaf Scans') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pests.index')" :active="request()->routeIs('pests.index')">
-                {{ __('Pest Scans') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('soils.index')" :active="request()->routeIs('soils.index')">
-                {{ __('Soil Scans') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('farm-owners.index')" :active="request()->routeIs('farm-owners.index')">
-                {{ __('Farm Owners') }}
             </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
             <div class="px-4">
-                <div class="font-medium text-base text-white">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-300">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-base text-white">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-gray-300">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->email : Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

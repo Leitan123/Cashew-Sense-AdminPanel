@@ -24,6 +24,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/leafs', [LeafController::class, 'index'])->name('leafs.index');
     Route::get('/pests', [PestController::class, 'index'])->name('pests.index');
     Route::get('/soils', [SoilScanController::class, 'index'])->name('soils.index');
+    // Admin view for Farm Owners
+    Route::get('/farm-owners', [\App\Http\Controllers\FarmOwnerController::class, 'index'])->name('farm-owners.index');
 });
+
+Route::middleware('auth:farm_owner')->group(function () {
+    Route::get('/farm-owner/dashboard', function () {
+        return view('farm_owner.dashboard');
+    })->name('farm_owner.dashboard');
+
+    Route::get('/farm-owner/profile', [\App\Http\Controllers\FarmOwnerProfileController::class, 'edit'])->name('farm_owner.profile.edit');
+});
+
 
 require __DIR__.'/auth.php';

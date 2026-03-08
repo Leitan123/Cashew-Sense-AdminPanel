@@ -15,6 +15,21 @@
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
+        <!-- Role Selection -->
+        <div class="flex items-center gap-6 mb-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="role" value="admin" class="w-4 h-4 text-[#4ade80] bg-transparent border-gray-600 focus:ring-[#4ade80] focus:ring-2" checked>
+                <span class="text-sm text-gray-300">Admin</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="role" value="farm_owner" class="w-4 h-4 text-[#4ade80] bg-transparent border-gray-600 focus:ring-[#4ade80] focus:ring-2" {{ old('role') == 'farm_owner' ? 'checked' : '' }}>
+                <span class="text-sm text-gray-300">Farm Owner</span>
+            </label>
+        </div>
+        @error('role')
+            <div class="error-text">{{ $message }}</div>
+        @enderror
+
         <!-- Email Address -->
         <div class="input-wrapper">
             <input

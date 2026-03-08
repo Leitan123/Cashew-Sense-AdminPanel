@@ -117,4 +117,26 @@ class AuthController extends Controller
             return response()->json(['error' => 'Login failed', 'details' => $e->getMessage()], 500);
         }
     }
+
+    public function verifyEmployeeCode(Request $request)
+    {
+        try {
+            $request->validate([
+                'employee_code' => 'required|string',
+            ]);
+
+            $code = $request->input('employee_code');
+            $farmOwner = \App\Models\FarmOwner::where('unique_code', $code)->first();
+
+            if (!$farmOwner) {
+                return response()->json(['error' => 'Invalid Employee Code.'], 404);
+            }
+
+            return response()->json(['message' => 'Valid Employee Code.', 'farm_owner' => $farmOwner->name], 200);
+
+        } catch (\Exception $e) {
+            Log::error('API Verify Employee Code failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Verification failed', 'details' => $e->getMessage()], 500);
+        }
+    }
 }
