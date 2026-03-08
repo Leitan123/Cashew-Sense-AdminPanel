@@ -121,6 +121,51 @@ class SyncController extends Controller
                 }
             }
 
+            // 4. Process Soil Scans
+            if (isset($data['soil_scans']) && is_array($data['soil_scans'])) {
+                foreach ($data['soil_scans'] as $scan) {
+                    $customer = Customer::where('phone', $scan['user_phone'])->first();
+                    if ($customer) {
+                        $exists = DB::table('soil_scans')
+                            ->where('customer_id', $customer->id)
+                            ->where('scan_timestamp', $scan['timestamp'])
+                            ->exists();
+
+                        $imageUrl = $scan['imagePath'] ?? 'placeholder';
+                        if (!empty($scan['imageBase64'])) {
+                            $imageData = base64_decode($scan['imageBase64']);
+                            $fileName = 'soil_' . time() . '_' . uniqid() . '.jpg';
+                            
+                            $dir = public_path('soil');
+                            if (!file_exists($dir)) {
+                                mkdir($dir, 0777, true);
+                            }
+                            
+                            file_put_contents($dir . '/' . $fileName, $imageData);
+                            $imageUrl = 'public/soil/' . $fileName;
+                        }
+
+                        if (!$exists) {
+                            DB::table('soil_scans')->insert([
+                                'customer_id' => $customer->id,
+                                'scan_timestamp' => $scan['timestamp'],
+                                'moisture' => $scan['moisture'] ?? null,
+                                'temperature' => $scan['temperature'] ?? null,
+                                'ec' => $scan['ec'] ?? null,
+                                'ph' => $scan['ph'] ?? null,
+                                'nitrogen' => $scan['nitrogen'] ?? null,
+                                'phosphorus' => $scan['phosphorus'] ?? null,
+                                'potassium' => $scan['potassium'] ?? null,
+                                'soil_score' => $scan['soil_score'] ?? null,
+                                'image_url' => $imageUrl,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+                }
+            }
+
             DB::commit();
             return response()->json(['message' => 'Sync successful'], 200);
 

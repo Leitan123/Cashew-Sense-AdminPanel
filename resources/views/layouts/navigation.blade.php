@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('pests.index')" :active="request()->routeIs('pests.index')">
                         {{ __('Pest Scans') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('soils.index')" :active="request()->routeIs('soils.index')">
+                        {{ __('Soil Scans') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -87,6 +90,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('pests.index')" :active="request()->routeIs('pests.index')">
                 {{ __('Pest Scans') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('soils.index')" :active="request()->routeIs('soils.index')">
+                {{ __('Soil Scans') }}
             </x-responsive-nav-link>
         </div>
 
