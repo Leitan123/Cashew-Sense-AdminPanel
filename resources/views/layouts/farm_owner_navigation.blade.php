@@ -1,99 +1,107 @@
-<nav x-data="{ open: false }" class="bg-[#4f7942] border-b border-[#3b5b31]">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-white" />
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+<aside
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-[#2c3e2d] text-white transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col"
+>
+    {{-- Logo / Brand --}}
+    <div class="flex items-center justify-between h-16 px-5 border-b border-[#3b5b31] shrink-0">
+        <a href="{{ route('farm_owner.dashboard') }}" class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-[#4f7942] rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
             </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#4f7942] hover:text-[#f5f5dc] focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('farm_owner.profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#f5f5dc] hover:bg-[#3b5b31] focus:outline-none focus:bg-[#3b5b31] focus:text-[#f5f5dc] transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+            <span class="text-lg font-bold tracking-wide">CashewSense</span>
+        </a>
+        {{-- Close button (mobile) --}}
+        <button @click="sidebarOpen = false" class="lg:hidden p-1 rounded-md hover:bg-[#3b5b31] focus:outline-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+    {{-- Navigation Links --}}
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Main</p>
 
-        <!-- Responsive Settings Options -->
-            <div class="px-4">
-                <div class="font-medium text-base text-white">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-300">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->email : Auth::user()->email }}</div>
-            </div>
+        {{-- Dashboard --}}
+        <a href="{{ route('farm_owner.dashboard') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.dashboard') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Dashboard
+        </a>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+        <p class="px-3 mt-5 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Management</p>
 
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+        {{-- Customers --}}
+        <a href="{{ route('farm_owner.customers') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.customers') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            My Customers
+        </a>
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+        <p class="px-3 mt-5 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Scan Records</p>
+
+        {{-- Leaf Scans --}}
+        <a href="{{ route('farm_owner.leafs') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.leafs') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Leaf Scans
+        </a>
+
+        {{-- Pest Scans --}}
+        <a href="{{ route('farm_owner.pests') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.pests') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+            </svg>
+            Pest Scans
+        </a>
+
+        {{-- Soil Scans --}}
+        <a href="{{ route('farm_owner.soils') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.soils') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Soil Scans
+        </a>
+
+        <p class="px-3 mt-5 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Account</p>
+
+        {{-- Profile --}}
+        <a href="{{ route('farm_owner.profile.edit') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.profile.edit') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            My Profile
+        </a>
+    </nav>
+
+    {{-- Sidebar Footer --}}
+    <div class="px-3 py-4 border-t border-[#3b5b31] shrink-0">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
+                    class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-red-600/20 hover:text-red-400 transition-colors duration-150">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Log Out
+            </button>
+        </form>
     </div>
-</nav>
+</aside>
