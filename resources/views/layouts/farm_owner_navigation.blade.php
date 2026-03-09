@@ -15,6 +15,18 @@
                     <x-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('farm_owner.customers.index')" :active="request()->routeIs('farm_owner.customers.index')">
+                        {{ __('Customers') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('farm_owner.leafs.index')" :active="request()->routeIs('farm_owner.leafs.index')">
+                        {{ __('Leaf Scans') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('farm_owner.pests.index')" :active="request()->routeIs('farm_owner.pests.index')">
+                        {{ __('Pest Scans') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('farm_owner.soils.index')" :active="request()->routeIs('farm_owner.soils.index')">
+                        {{ __('Soil Scans') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +81,18 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('farm_owner.customers.index')" :active="request()->routeIs('farm_owner.customers.index')">
+                {{ __('Customers') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('farm_owner.leafs.index')" :active="request()->routeIs('farm_owner.leafs.index')">
+                {{ __('Leaf Scans') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('farm_owner.pests.index')" :active="request()->routeIs('farm_owner.pests.index')">
+                {{ __('Pest Scans') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('farm_owner.soils.index')" :active="request()->routeIs('farm_owner.soils.index')">
+                {{ __('Soil Scans') }}
             </x-responsive-nav-link>
         </div>
 
