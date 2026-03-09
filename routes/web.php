@@ -33,6 +33,11 @@ Route::middleware('auth:farm_owner')->group(function () {
         return view('farm_owner.dashboard');
     })->name('farm_owner.dashboard');
 
+    Route::get('/farm-owner/customers', [\App\Http\Controllers\FarmOwnerDataController::class, 'customers'])->name('farm_owner.customers.index');
+    Route::get('/farm-owner/leafs', [\App\Http\Controllers\FarmOwnerDataController::class, 'leafScans'])->name('farm_owner.leafs.index');
+    Route::get('/farm-owner/pests', [\App\Http\Controllers\FarmOwnerDataController::class, 'pestScans'])->name('farm_owner.pests.index');
+    Route::get('/farm-owner/soils', [\App\Http\Controllers\FarmOwnerDataController::class, 'soilScans'])->name('farm_owner.soils.index');
+
     Route::get('/farm-owner/profile', [\App\Http\Controllers\FarmOwnerProfileController::class, 'edit'])->name('farm_owner.profile.edit');
 });
 
