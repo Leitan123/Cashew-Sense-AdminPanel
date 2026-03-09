@@ -18,11 +18,8 @@
         <div class="min-h-screen bg-[#f5f5dc]">
             @include('layouts.navigation')
 
-            <!-- Main Content Area -->
-            <div class="md:ml-64 min-h-screen">
-                <!-- Mobile spacer for fixed top bar -->
-                <div class="md:hidden h-14"></div>
-
+            <!-- Main Content Area (offset for sidebar + top navbar) -->
+            <div class="md:ml-64 pt-16 min-h-screen">
                 <!-- Page Heading -->
                 @isset($header)
                     <header class="bg-white shadow">

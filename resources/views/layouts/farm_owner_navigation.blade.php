@@ -1,4 +1,5 @@
-<nav x-data="{ open: false }" class="fixed top-0 left-0 h-full w-64 bg-[#4f7942] border-r border-[#3b5b31] z-30 hidden md:flex flex-col">
+<!-- Sidebar -->
+<nav class="fixed top-0 left-0 h-full w-64 bg-[#4f7942] border-r border-[#3b5b31] z-30 hidden md:flex flex-col">
     <!-- Logo -->
     <div class="flex items-center justify-center h-16 border-b border-[#3b5b31]">
         <a href="{{ route('farm_owner.dashboard') }}" class="flex items-center space-x-2">
@@ -36,15 +37,35 @@
             </x-sidebar-link>
         </div>
     </div>
+</nav>
 
-    <!-- User Section at Bottom -->
-    <div class="border-t border-[#3b5b31] p-4">
-        <x-dropdown align="bottom-start" width="48">
+<!-- Top Navbar (Profile & Logout only) -->
+<div x-data="{ open: false }" class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-white border-b border-gray-200 z-20 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+    <!-- Mobile: Logo + Hamburger -->
+    <div class="flex items-center md:hidden">
+        <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-[#4f7942] hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
+            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <a href="{{ route('farm_owner.dashboard') }}" class="ml-2 flex items-center space-x-2">
+            <x-application-logo class="block h-8 w-auto fill-current text-[#4f7942]" />
+            <span class="text-[#4f7942] font-semibold">CashewSense</span>
+        </a>
+    </div>
+
+    <!-- Desktop: empty left side -->
+    <div class="hidden md:block"></div>
+
+    <!-- Profile Dropdown (visible on all screens) -->
+    <div class="flex items-center">
+        <x-dropdown align="right" width="48">
             <x-slot name="trigger">
-                <button class="flex items-center w-full px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-[#3b5b31] focus:outline-none transition ease-in-out duration-150">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    <span class="truncate">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</span>
-                    <svg class="fill-current h-4 w-4 ml-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <button class="inline-flex items-center px-3 py-2 border border-gray-200 text-sm leading-4 font-medium rounded-md text-[#2c3e2d] bg-white hover:bg-gray-50 focus:outline-none transition ease-in-out duration-150">
+                    <svg class="w-5 h-5 mr-2 text-[#4f7942]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span>{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</span>
+                    <svg class="fill-current h-4 w-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
                 </button>
@@ -58,7 +79,6 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
@@ -68,25 +88,9 @@
             </x-slot>
         </x-dropdown>
     </div>
-</nav>
 
-<!-- Mobile Top Bar -->
-<div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-[#4f7942] border-b border-[#3b5b31]">
-    <div class="flex items-center justify-between h-14 px-4">
-        <a href="{{ route('farm_owner.dashboard') }}" class="flex items-center space-x-2">
-            <x-application-logo class="block h-8 w-auto fill-current text-white" />
-            <span class="text-white font-semibold">CashewSense</span>
-        </a>
-        <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#f5f5dc] hover:bg-[#3b5b31] focus:outline-none transition duration-150 ease-in-out">
-            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
-
-    <!-- Mobile Slide-out Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden bg-[#4f7942] border-t border-[#3b5b31]">
+    <!-- Mobile Navigation Menu -->
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden md:hidden absolute top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-lg">
         <div class="pt-2 pb-3 space-y-1 px-2">
             <x-responsive-nav-link :href="route('farm_owner.dashboard')" :active="request()->routeIs('farm_owner.dashboard')">
                 {{ __('Dashboard') }}
@@ -103,31 +107,6 @@
             <x-responsive-nav-link :href="route('farm_owner.soils.index')" :active="request()->routeIs('farm_owner.soils.index')">
                 {{ __('Soil Scans') }}
             </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-[#3b5b31]">
-            <div class="px-4">
-                <div class="font-medium text-base text-white">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->name : Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-300">{{ Auth::guard('farm_owner')->check() ? Auth::guard('farm_owner')->user()->email : Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
         </div>
     </div>
 </div>
