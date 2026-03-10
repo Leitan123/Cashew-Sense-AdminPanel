@@ -5,70 +5,70 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-12" style="padding-top: 3rem; padding-bottom: 3rem; font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem;">
             @if(session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                <div style="margin-bottom: 1rem; background-color: #d1fae5; border: 1px solid #34d399; color: #065f46; padding: 0.75rem 1rem; border-radius: 0.5rem; position: relative;">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+            <div style="background-color: white; overflow: hidden; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); border-radius: 0.5rem;">
+                <div style="padding: 1.5rem; color: #111827;">
+                    <div style="overflow-x: auto;">
+                        <table style="min-width: 100%; border-collapse: collapse;">
+                            <thead style="background-color: #f9fafb; border-bottom: 1px solid #e5e7eb;">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Farm Owner</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target Plan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested At</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th style="padding: 0.75rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Farm Owner</th>
+                                    <th style="padding: 0.75rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Target Plan</th>
+                                    <th style="padding: 0.75rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+                                    <th style="padding: 0.75rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Requested At</th>
+                                    <th style="padding: 0.75rem 1.5rem; text-align: center; font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody style="background-color: white;">
                                 @forelse($requests as $request)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ $request->farmOwner->name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $request->farmOwner->unique_code }}</div>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 1rem 1.5rem; white-space: nowrap;">
+                                            <div style="font-size: 0.875rem; font-weight: 500; color: #111827;">{{ $request->farmOwner->name }}</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">{{ $request->farmOwner->unique_code }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 font-bold">{{ $request->subscription->name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $request->subscription->limit }} Farmers Limit</div>
+                                        <td style="padding: 1rem 1.5rem; white-space: nowrap;">
+                                            <div style="font-size: 0.875rem; color: #111827; font-weight: 700;">{{ $request->subscription->name }}</div>
+                                            <div style="font-size: 0.75rem; color: #6b7280;">{{ $request->subscription->limit }} Farmers Limit</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td style="padding: 1rem 1.5rem; white-space: nowrap;">
                                             @if($request->status == 'pending')
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                                <span style="padding: 0.25rem 0.5rem; display: inline-flex; font-size: 0.75rem; font-weight: 600; border-radius: 9999px; background-color: #fef3c7; color: #92400e;">Pending</span>
                                             @elseif($request->status == 'approved')
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
+                                                <span style="padding: 0.25rem 0.5rem; display: inline-flex; font-size: 0.75rem; font-weight: 600; border-radius: 9999px; background-color: #dcfce7; color: #166534;">Approved</span>
                                             @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                                                <span style="padding: 0.25rem 0.5rem; display: inline-flex; font-size: 0.75rem; font-weight: 600; border-radius: 9999px; background-color: #fee2e2; color: #991b1b;">Rejected</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td style="padding: 1rem 1.5rem; white-space: nowrap; font-size: 0.875rem; color: #6b7280;">
                                             {{ $request->created_at->format('M d, Y H:i') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                        <td style="padding: 1rem 1.5rem; white-space: nowrap; text-align: center; font-size: 0.875rem; font-weight: 500;">
                                             @if($request->status == 'pending')
-                                                <div class="flex justify-center space-x-2">
+                                                <div style="display: flex; justify-content: center; gap: 0.5rem;">
                                                     <form action="{{ route('admin.subscription_requests.approve', $request->id) }}" method="POST">
                                                         @csrf
-                                                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs transition">Approve</button>
+                                                        <button type="submit" style="background-color: #16a34a; cursor: pointer; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; border: none; transition: background-color 0.2s;">Approve</button>
                                                     </form>
                                                     <form action="{{ route('admin.subscription_requests.reject', $request->id) }}" method="POST">
                                                         @csrf
-                                                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition">Reject</button>
+                                                        <button type="submit" style="background-color: #dc2626; cursor: pointer; color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.75rem; border: none; transition: background-color 0.2s;">Reject</button>
                                                     </form>
                                                 </div>
                                             @else
-                                                <span class="text-gray-400">Processed</span>
+                                                <span style="color: #9ca3af;">Processed</span>
                                             @endif
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-10 text-center text-gray-500 italic">
+                                        <td colspan="5" style="padding: 2.5rem 1.5rem; text-align: center; color: #6b7280; font-style: italic;">
                                             No subscription requests found.
                                         </td>
                                     </tr>
@@ -76,7 +76,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4">
+                    <div style="margin-top: 1rem;">
                         {{ $requests->links() }}
                     </div>
                 </div>
