@@ -20,7 +20,33 @@ class FarmOwner extends Authenticatable
         'email',
         'password',
         'unique_code',
+        'subscription_id'
     ];
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
+    public function subscriptionRequests()
+    {
+        return $this->hasMany(SubscriptionRequest::class);
+    }
+
+    public function getFarmerLimitAttribute()
+    {
+        return $this->subscription ? $this->subscription->limit : 10; // Default to 10 if no subscription
+    }
+
+    public function getFarmerCountAttribute()
+    {
+        return Customer::where('employee_code', $this->unique_code)->count();
+    }
+
+    public function hasReachedLimit()
+    {
+        return $this->farmer_count >= $this->farmer_limit;
+    }
 
     /**
      * The attributes that should be hidden for serialization.

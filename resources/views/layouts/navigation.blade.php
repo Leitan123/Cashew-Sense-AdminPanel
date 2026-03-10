@@ -56,6 +56,16 @@
             Farm Owners
         </a>
 
+        {{-- Subscription Requests --}}
+        <a href="{{ route('admin.subscription_requests.index') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('admin.subscription_requests.index') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h3.28a2 2 0 011.664.89l.812 1.22A2 2 0 0014.412 6H19a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5z"/>
+            </svg>
+            Subscription Requests
+        </a>
+
         <p class="px-3 mt-5 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Scan Records</p>
 
         {{-- Leaf Scans --}}

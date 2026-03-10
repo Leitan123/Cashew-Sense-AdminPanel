@@ -34,8 +34,22 @@ class SyncController extends Controller
                         'district' => $userData['district'],
                         'farm_size' => $userData['farm_size'],
                     ];
-                    if ($hasEmployeeCode) {
-                        $updateData['employee_code'] = $userData['employee_code'] ?? null;
+                    
+                    if ($hasEmployeeCode && isset($userData['employee_code'])) {
+                        $targetCode = $userData['employee_code'];
+                        
+                        // Check if this is a NEW link to this farm owner
+                        $isAlreadyLinked = $existing && $existing->employee_code === $targetCode;
+                        
+                        if (!$isAlreadyLinked) {
+                            $farmOwner = \App\Models\FarmOwner::where('unique_code', $targetCode)->first();
+                            if ($farmOwner && $farmOwner->hasReachedLimit()) {
+                                Log::warning("Limit reached for Farm Owner {$targetCode}. Cannot add customer {$userData['phone']}.");
+                                continue; // Skip this user
+                            }
+                        }
+                        
+                        $updateData['employee_code'] = $targetCode;
                     }
 
                     if ($existing) {
