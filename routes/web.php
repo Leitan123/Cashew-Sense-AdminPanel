@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LeafController;
 use App\Http\Controllers\PestController;
 use App\Http\Controllers\SoilScanController;
+use App\Http\Controllers\NutScanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/leafs', [LeafController::class, 'index'])->name('leafs.index');
     Route::get('/pests', [PestController::class, 'index'])->name('pests.index');
     Route::get('/soils', [SoilScanController::class, 'index'])->name('soils.index');
+    Route::get('/nuts', [NutScanController::class, 'index'])->name('nuts.index');
+    
     // Admin view for Farm Owners
     Route::get('/farm-owners', [\App\Http\Controllers\FarmOwnerController::class, 'index'])->name('farm-owners.index');
     
@@ -44,6 +47,7 @@ Route::middleware('auth:farm_owner')->group(function () {
     Route::get('/farm-owner/leaf-scans', [\App\Http\Controllers\FarmOwnerDataController::class, 'leafScans'])->name('farm_owner.leafs');
     Route::get('/farm-owner/pest-scans', [\App\Http\Controllers\FarmOwnerDataController::class, 'pestScans'])->name('farm_owner.pests');
     Route::get('/farm-owner/soil-scans', [\App\Http\Controllers\FarmOwnerDataController::class, 'soilScans'])->name('farm_owner.soils');
+    Route::get('/farm-owner/nut-scans', [\App\Http\Controllers\FarmOwnerDataController::class, 'nuts'])->name('farm_owner.nuts');
     Route::get('/farm-owner/subscription', [\App\Http\Controllers\FarmOwnerSubscriptionController::class, 'index'])->name('farm_owner.subscription');
     Route::post('/farm-owner/subscription/request', [\App\Http\Controllers\FarmOwnerSubscriptionController::class, 'requestUpgrade'])->name('farm_owner.subscription.request');
 });

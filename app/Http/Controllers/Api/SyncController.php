@@ -186,6 +186,46 @@ class SyncController extends Controller
                 }
             }
 
+            // 5. Process Nut Scans
+            if (isset($data['nut_scans']) && is_array($data['nut_scans'])) {
+                foreach ($data['nut_scans'] as $scan) {
+                    $customer = Customer::where('phone', $scan['user_phone'])->first();
+                    if ($customer) {
+                        $exists = DB::table('nut_scans')
+                            ->where('customer_id', $customer->id)
+                            ->where('scan_timestamp', $scan['timestamp'])
+                            ->exists();
+
+                        $imageUrl = $scan['imagePath'] ?? 'placeholder';
+                        if (!empty($scan['imageBase64'])) {
+                            $imageData = base64_decode($scan['imageBase64']);
+                            $fileName = 'nut_' . time() . '_' . uniqid() . '.jpg';
+                            
+                            $dir = public_path('nut');
+                            if (!file_exists($dir)) {
+                                mkdir($dir, 0777, true);
+                            }
+                            
+                            file_put_contents($dir . '/' . $fileName, $imageData);
+                            $imageUrl = 'public/nut/' . $fileName;
+                        }
+
+                        if (!$exists) {
+                            DB::table('nut_scans')->insert([
+                                'customer_id' => $customer->id,
+                                'scan_timestamp' => $scan['timestamp'],
+                                'predicted_class' => $scan['predicted_class'] ?? 'Unknown',
+                                'weight' => $scan['weight'] ?? 0.0,
+                                'final_grade' => $scan['final_grade'] ?? 'Unknown',
+                                'image_url' => $imageUrl,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+                }
+            }
+
             DB::commit();
             return response()->json(['message' => 'Sync successful'], 200);
 

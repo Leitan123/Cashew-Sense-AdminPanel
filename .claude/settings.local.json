@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(grep -l \"app-layout\\\\|farm-owner-app-layout\" /f/cashew_sense/Cashew-Sense-AdminPanel/resources/views/**/*.blade.php)",
-      "Bash(xargs grep -l \"layout\")"
-    ]
-  }
-}

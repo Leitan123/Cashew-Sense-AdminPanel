@@ -78,6 +78,16 @@
             Soil Scans
         </a>
 
+        {{-- Nut Scans --}}
+        <a href="{{ route('farm_owner.nuts') }}"
+           class="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+                  {{ request()->routeIs('farm_owner.nuts') ? 'bg-[#4f7942] text-white' : 'text-gray-300 hover:bg-[#3b5b31] hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4m0 8v4m-8-8h4m8 0h4" />
+            </svg>
+            Nut Scans
+        </a>
         <p class="px-3 mt-5 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Account</p>
 
         {{-- Profile --}}

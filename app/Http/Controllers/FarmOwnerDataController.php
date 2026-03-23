@@ -76,4 +76,19 @@ class FarmOwnerDataController extends Controller
 
         return view('farm_owner.soils.index', compact('scans'));
     }
+
+    /**
+     * Show nut scans for this farm owner's customers.
+     */
+    public function nuts()
+    {
+        $ownerCode = $this->ownerCode();
+
+        $scans = \App\Models\NutScan::with('customer')
+            ->whereHas('customer', fn($q) => $q->where('employee_code', $ownerCode))
+            ->orderBy('scan_timestamp', 'desc')
+            ->paginate(15);
+
+        return view('farm_owner.nuts.index', compact('scans'));
+    }
 }
